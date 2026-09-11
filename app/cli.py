@@ -8,6 +8,7 @@ import io
 import json
 import sys
 
+from app import __version__
 from app.backtest import run_backtest
 from app.market_data import estimate_mu_sigma, fetch_adjusted_closes
 from app.models import (
@@ -91,6 +92,7 @@ def cmd_backtest(args: argparse.Namespace) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="portfolio-opt", description="Gurobi portfolio optimization CLI")
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = p.add_subparsers(dest="command", required=True)
 
     opt = sub.add_parser("optimize", help="Estimate μ/Σ from market data and optimize")
