@@ -10,3 +10,7 @@ tests
 .env
 gurobi.lic
 .DS_Store
+
+Optimization 2
+docs
+.github
