@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    # Academic named-user licenses do not work in Docker.
+    # Set WLS env vars if you have a floating/web license:
+    # environment:
+    #   - GRB_WLSACCESSID=
+    #   - GRB_WLSSECRET=
+    #   - GRB_WLSLICENSEID=

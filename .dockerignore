@@ -1,0 +1,12 @@
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.git
+.gitignore
+*.md
+tests
+.env
+gurobi.lic
+.DS_Store
