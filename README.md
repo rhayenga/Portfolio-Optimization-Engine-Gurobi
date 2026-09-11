@@ -17,7 +17,8 @@ Mean-variance portfolio optimizer exposed as a **FastAPI** service, solved with 
 Your Free Academic license is host-locked to this Mac (`~/gurobi.lic`):
 
 ```bash
-cd ~/Desktop/Optimization
+git clone https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi.git
+cd Portfolio-Optimization-Engine-Gurobi
 /opt/anaconda3/bin/python3.13 -m venv .venv
 source .venv/bin/activate
 pip install -U pip
