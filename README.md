@@ -9,7 +9,7 @@ Mean-variance portfolio optimizer exposed as a **FastAPI** service, solved with 
 - yfinance for historical prices → estimated μ / Σ
 - Docker (package & ship; academic license stays local)
 
-## Setup (local — recommended with academic license)
+## Quick Start & Setup (local — recommended with academic license)
 
 Your Free Academic license is host-locked to this Mac (`~/gurobi.lic`):
 
