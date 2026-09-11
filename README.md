@@ -2,6 +2,9 @@
 
 Mean-variance portfolio optimizer exposed as a **FastAPI** service, solved with **Gurobi 13**, packaged with **Docker**.
 
+**Project page:** [rhayenga.github.io/Portfolio-Optimization-Engine-Gurobi](https://rhayenga.github.io/Portfolio-Optimization-Engine-Gurobi/)  
+**Repo:** [github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi](https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi)
+
 ## Stack
 
 - Python 3.10+ / FastAPI + Uvicorn
@@ -22,7 +25,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --reload-exclude '.venv' --host 127.0.0.1 --port 8000
 ```
 
-Docs: http://127.0.0.1:8000/docs
+Docs: `http://127.0.0.1:8000/docs` (once the server above is running)
 
 ## Endpoints
 
