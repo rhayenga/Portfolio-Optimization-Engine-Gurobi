@@ -1,1 +1,156 @@
-<!doctype html><meta charset="utf-8"><title>Portfolio Optimization Engine</title><h1>Portfolio Optimization Engine (Gurobi)</h1><p>Mean-variance portfolio optimizer with Gurobi QP/MIQP, a FastAPI service, market-data estimation, and Docker packaging. It runs locally &mdash; see the <a href="https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi">repo</a> for setup.</p>
+<!-- Project site for the Portfolio Optimization Engine (GitHub Pages). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio Optimization Engine</title>
+  <style>
+    :root {
+      --navy: #0d1626;
+      --slate: #16233a;
+      --ink: #e6ecf5;
+      --accent: #4da3ff;
+      --mint: #52d6a8;
+      --muted: rgba(230, 236, 245, 0.68);
+      --line: rgba(230, 236, 245, 0.12);
+      --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      color: var(--ink);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(900px 460px at 8% -10%, rgba(77, 163, 255, 0.18), transparent 55%),
+        radial-gradient(680px 420px at 100% 0%, rgba(82, 214, 168, 0.12), transparent 50%),
+        linear-gradient(165deg, #132039 0%, var(--navy) 48%, #080e1a 100%);
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 4.5rem 1.4rem 3rem; }
+    .brand {
+      font-size: clamp(2.2rem, 6.5vw, 3.1rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      margin: 0 0 0.8rem;
+    }
+    .brand span { color: var(--accent); }
+    .lede {
+      margin: 0 0 1.6rem;
+      font-size: 1.08rem;
+      line-height: 1.55;
+      max-width: 38rem;
+      color: var(--muted);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-bottom: 2.4rem; }
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 0.72rem 1.15rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.94rem;
+      border: 1px solid transparent;
+      transition: transform 0.15s ease;
+    }
+    a.btn:hover { transform: translateY(-1px); }
+    a.primary { background: var(--accent); color: #06121f; }
+    a.ghost {
+      background: rgba(230, 236, 245, 0.06);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    section { margin-top: 1.7rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    h2 { font-size: 1.12rem; margin: 0 0 0.7rem; letter-spacing: -0.01em; }
+    p, li { margin: 0 0 0.6rem; line-height: 1.55; color: var(--muted); }
+    ul { padding-left: 1.15rem; margin: 0; }
+    li::marker { color: var(--mint); }
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.87em;
+      background: rgba(0, 0, 0, 0.32);
+      padding: 0.12rem 0.4rem;
+      border-radius: 5px;
+      color: var(--ink);
+    }
+    pre {
+      margin: 0.8rem 0 0;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.38);
+      border: 1px solid var(--line);
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      font-family: var(--font-mono);
+      color: var(--ink);
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--ink); font-weight: 600; }
+    td { color: var(--muted); }
+    td code { font-size: 0.85em; }
+    .note { color: var(--mint); font-size: 0.9rem; }
+    footer { margin-top: 2.4rem; font-size: 0.82rem; color: rgba(230, 236, 245, 0.45); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="brand">Portfolio <span>Optimization</span> Engine</h1>
+    <p class="lede">
+      Mean-variance portfolio optimizer built on Gurobi: quadratic and mixed-integer solves
+      behind a FastAPI service, with market-data estimation of expected returns and covariance,
+      efficient frontiers, and out-of-sample backtests.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi">View on GitHub</a>
+      <a class="btn ghost" href="https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi#quick-start--setup-local--recommended-with-academic-license">Quick start</a>
+    </div>
+
+    <section>
+      <h2>What it does</h2>
+      <ul>
+        <li>Maximizes <code>&mu;'w &minus; (&lambda;/2) w'&Sigma;w</code> under a budget constraint</li>
+        <li>Position limits, long-only or long/short, and sector caps</li>
+        <li>Cardinality limits via Gurobi binaries (<code>max_assets</code>, <code>min_weight</code>)</li>
+        <li>Estimates &mu; and &Sigma; from historical prices, with Ledoit&ndash;Wolf shrinkage</li>
+        <li>Efficient frontier sweeps and train/test backtests against equal weight</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>API</h2>
+      <table>
+        <tr><th>Endpoint</th><th>Purpose</th></tr>
+        <tr><td><code>POST /optimize</code></td><td>Optimize with your own &mu; and &Sigma;</td></tr>
+        <tr><td><code>POST /optimize/from-market</code></td><td>Estimate &mu;/&Sigma; from prices, then optimize</td></tr>
+        <tr><td><code>POST /frontier</code></td><td>Min variance across target returns</td></tr>
+        <tr><td><code>POST /backtest/from-market</code></td><td>Out-of-sample vs equal weight</td></tr>
+        <tr><td><code>GET /health</code></td><td>Liveness</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Run it on your machine</h2>
+      <p class="note">Solves run locally &mdash; Gurobi academic licenses are host-locked, so the API is not hosted here.</p>
+      <pre>git clone https://github.com/rhayenga/Portfolio-Optimization-Engine-Gurobi.git
+cd Portfolio-Optimization-Engine-Gurobi
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 127.0.0.1 --port 8000</pre>
+      <p>Interactive docs are then served at <code>/docs</code> on that local port.</p>
+    </section>
+
+    <section>
+      <h2>Stack</h2>
+      <p>Python and FastAPI, Gurobi via <code>gurobipy</code>, yfinance for price history,
+      pytest with GitHub Actions CI, and Docker packaging for the service layer.</p>
+    </section>
+
+    <footer>MIT licensed. Gurobi requires a separate license.</footer>
+  </div>
+</body>
+</html>
