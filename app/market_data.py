@@ -12,6 +12,8 @@ TRADING_DAYS = 252
 
 def fetch_adjusted_closes(tickers: list[str], lookback_days: int) -> pd.DataFrame:
     """Download daily adjusted closes for ``lookback_days`` of calendar history."""
+    if not tickers:
+        raise ValueError("tickers must be a non-empty list")
     if lookback_days < 30:
         raise ValueError("lookback_days must be at least 30")
 
