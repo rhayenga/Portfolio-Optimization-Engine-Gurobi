@@ -31,6 +31,9 @@ Docs: http://127.0.0.1:8000/docs
 | GET | `/health` | Liveness |
 | POST | `/optimize` | Optimize with your own μ and Σ |
 | POST | `/optimize/from-market` | Download prices, estimate μ/Σ, then optimize |
+| POST | `/frontier` | Efficient frontier (min variance at target returns) |
+| POST | `/frontier/from-market` | Estimate μ/Σ from prices, then sweep the frontier |
+| POST | `/backtest/from-market` | Train on history, optimize, evaluate OOS vs equal-weight |
 
 ### From-market example (real tickers)
 
@@ -73,6 +76,19 @@ Objective: maximize `μ'w − (λ/2) w'Σw` with budget, optional `min_return`, 
 source .venv/bin/activate
 pytest -q
 ```
+
+GitHub Actions runs the same suite on push/PR (`.github/workflows/ci.yml`).
+
+## CLI
+
+```bash
+source .venv/bin/activate
+python -m app.cli optimize --tickers AAPL,MSFT,GOOGL,JPM --risk-aversion 2 --max-weight 0.4
+python -m app.cli frontier --tickers AAPL,MSFT,GOOGL --n-points 10
+python -m app.cli backtest --tickers AAPL,MSFT,GOOGL,JPM --train-days 252 --test-days 63
+```
+
+Market endpoints shrink Σ with **Ledoit–Wolf** by default (`shrink_covariance: true`).
 
 ## Docker
 

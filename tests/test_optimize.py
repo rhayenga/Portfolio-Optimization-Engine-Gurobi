@@ -108,6 +108,35 @@ def test_min_return_constraint():
     assert out.expected_return >= 0.09 - 1e-6
 
 
+def test_turnover_limits_rebalance():
+    # Unconstrained prefers AAA; with tiny turnover from 100% BBB, stay near BBB
+    free = optimize_mean_variance(
+        OptimizeRequest(
+            tickers=["AAA", "BBB"],
+            expected_returns=[0.20, 0.05],
+            covariance=[[0.04, 0.0], [0.0, 0.01]],
+            risk_aversion=0.5,
+            long_only=True,
+        )
+    )
+    assert free.weights[0] > free.weights[1]
+
+    limited = optimize_mean_variance(
+        OptimizeRequest(
+            tickers=["AAA", "BBB"],
+            expected_returns=[0.20, 0.05],
+            covariance=[[0.04, 0.0], [0.0, 0.01]],
+            risk_aversion=0.5,
+            long_only=True,
+            current_weights=[0.0, 1.0],
+            max_turnover=0.2,
+        )
+    )
+    turnover = abs(limited.weights[0] - 0.0) + abs(limited.weights[1] - 1.0)
+    assert turnover <= 0.2 + 1e-5
+    assert limited.weights[1] > limited.weights[0]
+
+
 def test_infeasible_constraints_return_400():
     r = client.post(
         "/optimize",

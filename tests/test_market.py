@@ -19,11 +19,21 @@ def _fake_closes() -> pd.DataFrame:
 
 
 def test_estimate_mu_sigma_shapes():
-    tickers, mu, cov = estimate_mu_sigma(_fake_closes())
+    tickers, mu, cov, intensity = estimate_mu_sigma(_fake_closes())
     assert tickers == ["AAA", "BBB"]
     assert len(mu) == 2
     assert len(cov) == 2 and len(cov[0]) == 2
     assert abs(cov[0][1] - cov[1][0]) < 1e-12
+    assert 0.0 <= intensity <= 1.0
+
+
+def test_ledoit_wolf_reduces_off_diagonals_toward_identity():
+    from app.market_data import ledoit_wolf_shrinkage
+
+    sample = np.array([[0.04, 0.03], [0.03, 0.09]], dtype=float)
+    shrunk, intensity = ledoit_wolf_shrinkage(sample, n_obs=50)
+    assert 0.0 < intensity <= 1.0
+    assert abs(shrunk[0, 1]) <= abs(sample[0, 1]) + 1e-12
 
 
 def test_from_market_endpoint(monkeypatch):
