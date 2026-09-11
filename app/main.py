@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, HTTPException
 
+from app import __version__
 from app.backtest import run_backtest
 from app.market_data import estimate_mu_sigma, fetch_adjusted_closes
 from app.models import (
@@ -24,7 +25,7 @@ app = FastAPI(
         "Mean-variance portfolio optimization powered by Gurobi. "
         "Optimize, sweep an efficient frontier, or backtest optimized weights out of sample."
     ),
-    version="0.4.0",
+    version=__version__,
 )
 
 
@@ -52,7 +53,7 @@ def _run_frontier(req: EfficientFrontierRequest) -> EfficientFrontierResponse:
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "service": "portfolio-optimization-engine", "version": __version__}
 
 
 @app.post("/optimize", response_model=OptimizeResponse)
