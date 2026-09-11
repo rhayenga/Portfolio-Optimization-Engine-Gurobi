@@ -15,3 +15,6 @@ gurobi.lic
 *.sol
 .idea/
 .vscode/
+
+# Nested accidental clone
+Optimization 2/
